@@ -6,24 +6,34 @@ import reduxPromise from 'redux-promise';
 import logger from 'redux-logger';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createHistory as history } from 'history';
+import axios from 'axios';
 
 import ArticlesIndex from './containers/articles_index';
 import ArticlesShow from './containers/articles_show';
 import ArticlesNew from './containers/articles_new';
+import ArticlesUpdate from './containers/articles_update';
+import AuthorsIndex from './containers/authors_index';
+
+import Home from './containers/home';
+
 import '../assets/stylesheets/application.scss';
 
-import ArticlesReducer from './reducers/articles_reducer';
+import articlesReducer from './reducers/articles_reducer';
+import authorsReducer from './reducers/authors_reducer';
+import authorReducer from './reducers/author_reducer';
 import { reducer as formReducer } from 'redux-form';
 
 const initialState = {
   articles: [],
-  author: 'mat'
+  authors: [],
+  author: {id: 2, firstname: 'mateo', lastname: 'blanc'}
 };
 
 const reducers = combineReducers({
   // key: reducer
-  author: (state = null, action) => state,
   articles: articlesReducer,
+  authors: authorsReducer,
+  author: authorReducer,
   form: formReducer
 });
 
@@ -34,9 +44,12 @@ ReactDOM.render(
   <Provider store={createStore(reducers, initialState, middlewares)}>
     <Router history={history}>
       <Switch>
+        <Route path="/" exact component={Home} />
         <Route path="/articles" exact component={ArticlesIndex} />
-          <Route path="/articles/new" exact component={ArticlesNew} />
-          <Route path="/articles/:id" component={ArticlesShow} />
+        <Route path="/authors" exact component={AuthorsIndex} />
+        <Route path="/articles/new" exact component={ArticlesNew} />
+        <Route path="/articles/:id/update" exact component={ArticlesUpdate} />
+        <Route path="/articles/:id" component={ArticlesShow} />
       </Switch>
     </Router>
   </Provider>,
