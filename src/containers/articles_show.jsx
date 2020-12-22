@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link, withRouter } from 'react-router-dom';
 
-import { fetchArticle, deleteArticle } from '../actions';
+import { fetchArticle, fetchArticles, deleteArticle } from '../actions';
 import CommentsIndex from '../containers/comments_index';
 import CommentsNew from '../containers/comments_new';
 
 class ArticlesShow extends Component {
   componentDidMount() {
-    if (!this.props.article.id) {
+    if (!this.props.article) {
       this.props.fetchArticle(`/api/articles/${this.props.match.params.id}`);
     }
   }
@@ -64,8 +64,6 @@ class ArticlesShow extends Component {
   }
 };
 
-
-
 function mapStateToProps(state, ownProps) {
   const idFromUrl = parseInt(ownProps.match.params.id, 10);
   return ({
@@ -75,7 +73,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchArticle, deleteArticle }, dispatch);
+  return bindActionCreators({ fetchArticle, fetchArticles, deleteArticle }, dispatch);
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ArticlesShow));

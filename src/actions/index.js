@@ -45,7 +45,7 @@ export const fetchArticle = async (id) => {
     const resp = await axios.get(`http://localhost:8000${id}`);
     return {
       type: FETCH_ARTICLE,
-      payload: resp.data.id
+      payload: resp.data
     };
   } catch (err) {
       console.error(err);
