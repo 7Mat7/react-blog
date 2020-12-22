@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import { fetchAuthors, fetchArticle, updateArticle } from '../actions/index';
 import { bindActionCreators } from 'redux';
 
-import Aside from '../components/aside';
-
 class ArticlesUpdate extends Component {
   componentDidMount() {
     if (!this.props.article.id) {
@@ -25,11 +23,8 @@ class ArticlesUpdate extends Component {
   }
 
   render() {
-    return [
-      <Aside key="aside">
-        <Link to="/articles">Back to list</Link>
-      </Aside>,
-      <div key="add" className="form-container" style={{ backgroundImage: "url('/assets/images/form.jpg')"}}>
+    return (
+      <div key="add" className="form-container">
         <div className="overlay"></div>
         <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
           <div className="form-group">
@@ -42,8 +37,11 @@ class ArticlesUpdate extends Component {
           </div>
           <button type="submit">edit your article</button>
         </form>
+        <Link to="/articles">
+            Back
+          </Link>
       </div>
-    ];
+    );
   }
 }
 

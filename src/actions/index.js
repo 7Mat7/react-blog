@@ -6,10 +6,13 @@ export const DELETE_ARTICLE = 'DELETE_ARTICLE';
 
 export const SET_AUTHOR = 'SET_AUTHOR';
 export const AUTHOR_CREATED = 'AUTHOR_CREATED';
+export const FETCH_AUTHORS = 'FETCH_AUTHORS';
+
+export const COMMENT_CREATED = 'COMMENT_CREATED';
+export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 
 import axios from 'axios';
 
-export const FETCH_AUTHORS = 'FETCH_AUTHORS';
 
 export function fetchArticles() {
   const promise = axios.get(`http://localhost:8000/api/articles?page=1`)
@@ -110,5 +113,29 @@ export function createAuthor(body, callback) {
   return {
     type: AUTHOR_CREATED,
     payload: request
+  };
+}
+
+export function createComment(body) {
+  const request = fetch(`http://localhost:8000/api/comments`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/ld+json' },
+      body: JSON.stringify(body)
+    }).then(response => response.json())
+    console.log(request)
+
+  return {
+    type: COMMENT_CREATED,
+    payload: request
+  };
+}
+
+export function fetchComments(id) {
+  const promise = axios.get(`http://localhost:8000/api/articles/${id}/comments`)
+    .then(response => response.data['hydra:member']);
+  return {
+    type: FETCH_COMMENTS,
+    payload: promise
   };
 }

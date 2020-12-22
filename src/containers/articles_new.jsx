@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { createArticle } from '../actions/index';
 import { Link } from 'react-router-dom';
-import { fetchAuthors } from '../actions/index';
 import { bindActionCreators } from 'redux';
 
-import Aside from '../components/aside';
+import { fetchAuthors } from '../actions/index';
+import { createArticle } from '../actions/index';
 
 class ArticlesNew extends Component {
-
   onSubmit = (values) => {
     Object.assign(values, {author: `/api/authors/${this.props.author.id}`});
-    console.log(values);
     this.props.createArticle(values, (article) => {
       this.props.history.push('/articles'); // Navigate after submit
       return article;
@@ -20,11 +17,8 @@ class ArticlesNew extends Component {
   }
 
   render() {
-    return [
-      <Aside key="aside">
-        <Link to="/articles">Back to list</Link>
-      </Aside>,
-      <div key="add" className="form-container" style={{ backgroundImage: "url('/assets/images/form.jpg')"}}>
+    return (
+      <div key="add" className="form-container">
         <div className="overlay"></div>
         <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
           <div className="form-group">
@@ -37,8 +31,11 @@ class ArticlesNew extends Component {
           </div>
           <button type="submit">Add an article</button>
         </form>
+        <Link to="/articles">
+            Back
+          </Link>
       </div>
-    ];
+    );
   }
 }
 

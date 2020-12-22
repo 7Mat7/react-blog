@@ -4,8 +4,6 @@ export default function(state = [], action) {
   switch (action.type) {
     case FETCH_ARTICLES:
       return action.payload;
-    case FETCH_ARTICLE:
-      return [action.payload];
     case ARTICLE_UPDATED:
       return state.map(item => {
         if (item.id === action.payload.id) return action.payload;

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
 import { fetchAuthors, fetchArticles } from '../actions/index';
-import Aside from '../components/aside';
 
 class AuthorsIndex extends Component {
   componentWillMount() {
@@ -30,17 +29,13 @@ class AuthorsIndex extends Component {
   render() {
     if (this.props.authors.length === 0) {
       return [
-        // <Aside key="aside">
           <Link to="/articles">Back</Link>
-        // </Aside>
         ,
         <div className="no-article" key="noarticle">No authors yet</div>
       ];
     }
     return [
-      // <Aside key="aside">
         <Link to="/articles" key="sthing">Back</Link>
-      // </Aside>
       ,
       <div className="list-container" key="authors">
         {this.props.authors.map((author) => {

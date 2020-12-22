@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import { fetchAuthors, setAuthor, createAuthor } from '../actions/index';
 import { bindActionCreators } from 'redux';
 
-import Aside from '../components/aside';
-
 class Home extends Component {
   componentWillMount() {
     this.props.fetchAuthors();
@@ -34,20 +32,34 @@ class Home extends Component {
 
   render() {
     return (
-      <div key="add" className="form-container" style={{ backgroundImage: "url('/assets/images/form.jpg')"}}>
-        <div className="overlay"></div>
+      <div>
+        <div className="first-row">
+          <div className="container">
+          <h1>Le blog de <strong>Mateo</strong> pour <strong>Elinoï</strong>!</h1>
+          <p>Découvrez de supers articles très intéressants.</p>
+        </div>
+        </div>
 
-        <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
-          <div className="form-group">
-            <label htmlFor="InputFirstName">first name</label>
-            <Field name="firstname" type="text" placeholder="Your first name" component="input" className="form-control" />
+
+      <div className="container">
+        <div key="add" className="form-container" >
+          <div className="overlay">
+          <h2>Log in to discover</h2>
           </div>
-          <div className="form-group">
-            <label htmlFor="InputLastName">last name</label>
-            <Field name="lastname" type="text" placeholder="great content" component="input" className="form-control" />
-          </div>
-          <button type="submit">Browse our blog !</button>
-        </form>
+
+          <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+            <div className="form-group">
+              <label htmlFor="InputFirstName">first name</label>
+              <Field name="firstname" type="text" placeholder="Your first name" component="input" className="form-control" />
+            </div>
+            <div className="form-group">
+              <label htmlFor="InputLastName">last name</label>
+              <Field name="lastname" type="text" placeholder="great content" component="input" className="form-control" />
+            </div>
+            <button type="submit">Browse our blog !</button>
+          </form>
+        </div>
+      </div>
       </div>
     );
   }

@@ -12,6 +12,7 @@ import ArticlesIndex from './containers/articles_index';
 import ArticlesShow from './containers/articles_show';
 import ArticlesNew from './containers/articles_new';
 import ArticlesUpdate from './containers/articles_update';
+
 import AuthorsIndex from './containers/authors_index';
 
 import Home from './containers/home';
@@ -21,19 +22,22 @@ import '../assets/stylesheets/application.scss';
 import articlesReducer from './reducers/articles_reducer';
 import authorsReducer from './reducers/authors_reducer';
 import authorReducer from './reducers/author_reducer';
+import commentsReducer from './reducers/comments_reducer';
+
 import { reducer as formReducer } from 'redux-form';
 
 const initialState = {
   articles: [],
   authors: [],
-  author: {id: 2, firstname: 'mateo', lastname: 'blanc'}
+  author: {id: 2, firstname: 'mateo', lastname: 'blanc'},
+  comments: []
 };
 
 const reducers = combineReducers({
-  // key: reducer
   articles: articlesReducer,
   authors: authorsReducer,
   author: authorReducer,
+  comments: commentsReducer,
   form: formReducer
 });
 

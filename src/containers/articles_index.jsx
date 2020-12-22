@@ -2,47 +2,43 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import axios from 'axios';
 
 import { fetchArticles } from '../actions/index';
-import Aside from '../components/aside';
 
 class ArticlesIndex extends Component {
   componentWillMount() {
     this.props.fetchArticles();
-    // this.props.fetchAuthors();
+  }
 
+  renderPosts() {
+    return (
+    this.props.articles.map((article) => {
+          return (
+            <div key={article.id} className="article-smallad" key={article.id}>
+              <Link to={`/articles/${article.id}`}>
+                <div className="post-item">
+                  <h3>{article.title}</h3>
+                  <p>{article.content}</p>
+                </div>
+              </Link>
+            </div>
+          );
+        })
+    );
   }
 
   render() {
-    if (this.props.articles.length === 0) {
-      return [
-        // <Aside key="aside">
-          <Link to="/articles/new">Write an article</Link>
-        // </Aside>
-        ,
-        <div className="no-article" key="noarticle">No article yet</div>
-      ];
-    }
-    return [
-      // <Aside key="aside">
-        <Link to="/articles/new" key="sthing">Add an article</Link>
-      // </Aside>
-      ,
-      <div className="list-container" key="articles">
-        {this.props.articles.map((article) => {
-          return (
-            <div key={article.id} className="article-smallad" key={article.id}>
-              <Link to={`/articles/${article.id}`}  > Read </Link>
-              <div className="article-details">
-                <span>{article.title} - {article.content} </span>
-                <strong>Author: </strong> {article.author['lastname']}
-              </div>
-            </div>
-          );
-        })}
+    return (
+      <div>
+        <div className="first-row">
+          <h3>Blog</h3>
+          <Link className="btn btn-primary btn-cta" to="/articles/new">
+            Let's write a post!
+          </Link>
+        </div>
+        {this.renderPosts().reverse()}
       </div>
-    ];
+    );
   }
 };
 
