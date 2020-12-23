@@ -24,14 +24,12 @@ class ArticlesShow extends Component {
     if (this.props.article.author["@id"] === `/api/authors/${this.props.author.id}`) {
       return (
         <div>
-          <button style={{margin: "12px"}} onClick={this.handleClick}>
+          <button className="btn btn-primary btn-cta" style={{margin: "12px"}} onClick={this.handleClick}>
             Delete
           </button>
-            <Link to={`/articles/${this.props.article.id}/update`} key="sthing else">
-              <button>
+            <Link className="btn btn-primary btn-cta" style={{margin: "12px"}} to={`/articles/${this.props.article.id}/update`} key="sthing else">
               Update
-              </button>
-             </Link>
+            </Link>
         </div>
       )
     }

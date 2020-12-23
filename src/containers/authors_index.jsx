@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
 import { fetchAuthors, fetchArticles } from '../actions/index';
+import Article from '../components/article';
 
 class AuthorsIndex extends Component {
   componentWillMount() {
@@ -18,9 +19,7 @@ class AuthorsIndex extends Component {
     return (
       articles.map((article) => {
         return (
-          <ul>
-            <Link to={`/articles/${article.id}`}>{article.title} </Link>
-          </ul>
+          <Article article={article} key={article.id} />
         );
       })
     );
@@ -29,25 +28,33 @@ class AuthorsIndex extends Component {
   render() {
     if (this.props.authors.length === 0) {
       return [
+      <div key="firstrow" className="first-row">
+          <h3>Blog</h3>
           <Link to="/articles">Back</Link>
+          </div>
         ,
-        <div className="no-article" key="noarticle">No authors yet</div>
+        <div className="no-article" key="noauthor">No authors yet</div>
       ];
     }
     return [
+    <div key="top">
+    <div className="first-row">
+          <h3>Blog</h3>
         <Link to="/articles" key="sthing">Back</Link>
+    </div>
       ,
       <div className="list-container" key="authors">
         {this.props.authors.map((author) => {
           return (
             <div key={author.id} className="author-smallad" key={author.id}>
-              <div className="article-details">
-                <span>{author.firstname} - {author.lastname} </span>
+              <div className="post-item">
+                <h2><strong>{author.firstname} {author.lastname} </strong></h2>
                   {this.handleLoad(author)}
               </div>
             </div>
           );})
         }
+      </div>
       </div>
     ];
   }

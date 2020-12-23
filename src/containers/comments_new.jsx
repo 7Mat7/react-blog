@@ -20,7 +20,7 @@ class CommentsNew extends Component {
           <div className="form-group">
             <Field name="content" type="text" placeholder="Your comment" component="input" className="form-control" autoFocus />
           </div>
-          <button type="submit">Add a comment</button>
+          <button className="btn btn-primary btn-cta" type="submit">Add a comment</button>
         </form>
       </div>
     );

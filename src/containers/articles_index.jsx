@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
 import { fetchArticles } from '../actions/index';
+import Article from '../components/article'
 
 class ArticlesIndex extends Component {
   componentWillMount() {
@@ -14,14 +15,7 @@ class ArticlesIndex extends Component {
     return (
     this.props.articles.map((article) => {
           return (
-            <div key={article.id} className="article-smallad" key={article.id}>
-              <Link to={`/articles/${article.id}`}>
-                <div className="post-item">
-                  <h3>{article.title}</h3>
-                  <p>{article.content}</p>
-                </div>
-              </Link>
-            </div>
+            <Article article={article} key={article.id}/>
           );
         })
     );
@@ -32,10 +26,12 @@ class ArticlesIndex extends Component {
       <div>
         <div className="first-row">
           <h3>Blog</h3>
+
           <Link className="btn btn-primary btn-cta" to="/articles/new">
             Let's write a post!
           </Link>
         </div>
+        <Link to="/authors" >Browse by Author</Link>
         {this.renderPosts().reverse()}
       </div>
     );

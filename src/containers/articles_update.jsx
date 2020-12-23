@@ -35,7 +35,7 @@ class ArticlesUpdate extends Component {
             <label htmlFor="InputModel">Content</label>
             <Field name="content" type="textarea" placeholder={this.props.article.content} component="input" className="form-control" />
           </div>
-          <button type="submit">edit your article</button>
+          <button type="submit" className="btn btn-primary btn-cta">edit your article</button>
         </form>
         <Link to="/articles">
             Back
