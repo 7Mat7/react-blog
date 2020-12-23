@@ -20,7 +20,7 @@ class ArticlesShow extends Component {
     });
   }
 
-  renderAuthor = () => {
+  renderIfAuthor = () => {
     if (this.props.article.author["@id"] === `/api/authors/${this.props.author.id}`) {
       return (
         <div>
@@ -47,7 +47,8 @@ class ArticlesShow extends Component {
         <div className="post-item">
           <h3>{article.title}</h3>
           <p>{article.content}</p>
-          {this.renderAuthor()}
+          <p>by {article.author.firstname} {article.author.lastname}</p>
+          {this.renderIfAuthor()}
         </div>
         <Link to="/articles">
           Back

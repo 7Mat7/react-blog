@@ -8,7 +8,7 @@ class Article extends Component {
       <Link to={`/articles/${this.props.article.id}`}>
         <div className="post-item">
           <h3>{this.props.article.title}</h3>
-          <p>{this.props.article.content}</p>
+          <p>{this.props.article.content.substring(0, 100)}...</p>
         </div>
       </Link>
     </div>

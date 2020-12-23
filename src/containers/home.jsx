@@ -35,10 +35,10 @@ class Home extends Component {
       <div>
         <div className="first-row">
           <div className="container">
-          <h1>Le blog de <strong>Mateo</strong> pour <strong>Elinoï</strong>!</h1>
-          <p>Découvrez de supers articles très intéressants.</p>
+          <h1>Discover <strong>Mateo's </strong>blog for <strong>Elinoï !</strong></h1>
+          <p>Get some really intersting content :)</p>
         </div>
-        </div>
+      </div>
 
 
       <div className="container">
@@ -56,7 +56,7 @@ class Home extends Component {
               <label htmlFor="InputLastName">last name</label>
               <Field name="lastname" type="text" placeholder="great content" component="input" className="form-control" />
             </div>
-            <button type="submit">Browse our blog !</button>
+            <button className="btn btn-primary btn-cta" type="submit">Browse our blog !</button>
           </form>
         </div>
       </div>

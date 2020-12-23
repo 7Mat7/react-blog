@@ -29,7 +29,7 @@ import { reducer as formReducer } from 'redux-form';
 const initialState = {
   articles: [],
   authors: [],
-  author: {id: 2, firstname: 'mateo', lastname: 'blanc'},
+  author: null,
   comments: []
 };
 

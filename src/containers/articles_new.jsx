@@ -27,9 +27,9 @@ class ArticlesNew extends Component {
           </div>
           <div className="form-group">
             <label htmlFor="InputModel">Content</label>
-            <Field name="content" type="textarea" placeholder="great content" component="input" className="form-control" />
+            <Field name="content" type="textarea" placeholder="great content" component="textarea" className="form-control" />
           </div>
-          <button type="submit">Add an article</button>
+          <button className="btn btn-primary btn-cta" type="submit">Add an article</button>
         </form>
         <Link to="/articles">
             Back
