@@ -54,7 +54,7 @@ class Home extends Component {
             </div>
             <div className="form-group">
               <label htmlFor="InputLastName">last name</label>
-              <Field name="lastname" type="text" placeholder="great content" component="input" className="form-control" />
+              <Field name="lastname" type="text" placeholder="last name" component="input" className="form-control" />
             </div>
             <button className="btn btn-primary btn-cta" type="submit">Browse our blog !</button>
           </form>
