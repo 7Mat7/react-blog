@@ -38,24 +38,24 @@ class AuthorsIndex extends Component {
     }
     return [
     <div key="top">
-    <div className="first-row">
-          <h3>Blog</h3>
+      <div className="first-row">
+        <h3>Blog</h3>
         <Link to="/articles" key="sthing">Back</Link>
-    </div>
-      ,
+      </div>
+
       <div className="list-container" key="authors">
         {this.props.authors.map((author) => {
           return (
             <div key={author.id} className="author-smallad" key={author.id}>
               <div className="post-item">
                 <h2><strong>{author.firstname} {author.lastname} </strong></h2>
-                  {this.handleLoad(author)}
+                {this.handleLoad(author)}
               </div>
             </div>
           );})
         }
       </div>
-      </div>
+    </div>
     ];
   }
 };
