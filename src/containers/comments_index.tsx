@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { AnyAction, bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import { fetchComments } from '../actions/index';
-import { CommentType } from '../interface';
+import { CommentType, State } from '../interface';
 
 interface Props {
   id: number;
@@ -13,7 +13,8 @@ interface Props {
 
 class CommentsIndex extends Component<Props> {
   componentDidMount() {
-    this.props.fetchComments(this.props.id);
+    const test = this.props.fetchComments(this.props.id);
+    console.log(test);
   }
 
   render() {
@@ -31,13 +32,13 @@ class CommentsIndex extends Component<Props> {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: State) {
   return ({
     comments: state.comments,
   });
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch) {
   return bindActionCreators({ fetchComments }, dispatch);
 }
 

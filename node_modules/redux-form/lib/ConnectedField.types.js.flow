@@ -1,28 +1,36 @@
 // @flow
-import React from 'react'
+import type {Node, Component} from 'react'
 import type { Event, Context } from './types'
 
 export type InstanceApi = {
   name: string,
-  getRenderedComponent: { (): React.Component<*, *> },
+  getRenderedComponent: { (): Component<any, any> },
   isPristine: { (): boolean },
   getValue: { (): any }
-} & React.Component<*, *>
+} & Component<any, any>
 
 export type Props = {
   name: string,
   component: Function | string,
-  withRef?: boolean,
+  forwardRef?: boolean,
   _reduxForm: Context,
+  immutableProps?: Array<string>,
+  children?: Node,
 
   // same as Props in createFieldProps.js:
   asyncError: any,
   asyncValidating: boolean,
-  onBlur: { (event: Event, newValue: ?any, previousValue: ?any): void },
-  onChange: { (event: Event, newValue: ?any, previousValue: ?any): void },
-  onDrop: { (event: Event, newValue: ?any, previousValue: ?any): void },
-  onDragStart: { (event: Event): void },
-  onFocus: { (event: Event): void },
+  onBlur: {
+    (event: Event, newValue: ?any, previousValue: ?any, name: string): void
+  },
+  onChange: {
+    (event: Event, newValue: ?any, previousValue: ?any, name: string): void
+  },
+  onDrop: {
+    (event: Event, newValue: ?any, previousValue: ?any, name: string): void
+  },
+  onDragStart: { (event: Event, name: string): void },
+  onFocus: { (event: Event, name: string): void },
   dirty: boolean,
   dispatch: { (action: any): void },
   form: string,

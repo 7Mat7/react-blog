@@ -1,35 +1,33 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
-import { Link, Redirect } from 'react-router-dom';
+import { reduxForm, Field, InjectedFormProps } from 'redux-form';
+import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import { fetchArticle, updateArticle } from '../actions/index';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { ArticleType, AuthorType } from '../interface';
-import { History } from 'history';
+import { ArticleType, AuthorType, State } from '../interface';
 
 interface Props {
-  article: ArticleType,
-  fetchArticle: (url: string) => AnyAction;
-  match: any;
+  article: ArticleType;
+  fetchArticle: (iri: string) => Promise<AnyAction>;
   author: AuthorType;
-  updateArticle: (values: string, id: number, callback: () => ArticleType) => AnyAction;
-  history: History;
-  handleSubmit: any;
+  updateArticle: (body: ArticleType, id: number, callback: (arg: ArticleType) => void) => AnyAction;
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-class ArticlesUpdate extends Component<Props> {
+type ownProps = RouteComponentProps<InjectedFormProps<ArticleType, Props>& Props>;
+
+class ArticlesUpdate extends PureComponent<RouteComponentProps<InjectedFormProps<ArticleType, Props>& Props>> {
   componentDidMount() {
     if (!this.props.article.id) {
       this.props.fetchArticle(`/api/articles/${this.props.match.params.id}`);
     }
   }
 
-  onSubmit = (values) => {
+  onSubmit = (values: ArticleType) => {
     const id = this.props.article.id;
     Object.assign(values, {author: `/api/authors/${this.props.author.id}`});
-    this.props.updateArticle(values, id, (article: any) => {
-      this.props.history.push('/articles'); // Navigate after submit
-      console.log('callback', article);
+    this.props.updateArticle(values, id, (article) => {
+      this.props.history.push('/articles');
       return article;
     });
   }
@@ -60,7 +58,8 @@ class ArticlesUpdate extends Component<Props> {
   }
 }
 
-function mapStateToProps(state: any, ownProps) {
+function mapStateToProps(state: State, ownProps: ownProps) {
+
   const idFromUrl = parseInt(ownProps.match.params.id, 10);
   return ({
     article: state.articles.find(c => c.id === idFromUrl),

@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field, InjectedFormProps } from 'redux-form';
 import { Link, Redirect } from 'react-router-dom';
-import { AnyAction, bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { History } from 'history';
 
 import { createArticle } from '../actions/index';
-import { ArticleType, AuthorType } from '../interface';
+import { ArticleType, AuthorType, State } from '../interface';
 
 interface Props {
   author: AuthorType;
   history: History;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  createArticle: (body: string, callback: any) => AnyAction;
+  createArticle: (body: string, callback: (arg: ArticleType) => void) => AnyAction;
 }
 
 class ArticlesNew extends Component<InjectedFormProps<ArticleType, Props>& Props> {
-  onSubmit = (values) => {
+  onSubmit = (values: any) => {
     Object.assign(values, {author: `/api/authors/${this.props.author.id}`});
     this.props.createArticle(values, (article) => {
       this.props.history.push('/articles'); // Navigate after submit
@@ -50,7 +50,7 @@ class ArticlesNew extends Component<InjectedFormProps<ArticleType, Props>& Props
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: State) {
   return ({ author: state.author });
 }
 

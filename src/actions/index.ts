@@ -15,18 +15,11 @@ import axios from 'axios';
 import { AnyAction } from "redux";
 import { ArticleType, AuthorType } from '../interface';
 
-export function fetchArticles(): AnyAction {
-  const promise = axios.get(`http://localhost:8000/api/articles?page=1`)
-    .then(response => response.data['hydra:member']);
+export const fetchArticles = (): AnyAction => ({
+    type: FETCH_ARTICLES
+  });
 
-  return {
-    type: FETCH_ARTICLES,
-    payload: promise
-  };
-}
-
-
-export function createArticle(body: string, callback: any) {
+export function createArticle(body: string, callback: (values: any) => void): AnyAction {
   const request = fetch(`http://localhost:8000/api/articles`,
     {
       method: 'POST',
@@ -41,9 +34,9 @@ export function createArticle(body: string, callback: any) {
   };
 }
 
-export const fetchArticle = async (id: number) => {
+export const fetchArticle = async (iri: string): Promise<AnyAction> => {
   try {
-    const resp = await axios.get(`http://localhost:8000${id}`);
+    const resp = await axios.get(`http://localhost:8000${iri}`);
     return {
       type: FETCH_ARTICLE,
       payload: resp.data
@@ -53,7 +46,7 @@ export const fetchArticle = async (id: number) => {
   }
 }
 
-export function updateArticle(body: string, id: number, callback: (values: any) => void) {
+export function updateArticle(body: ArticleType, id: number, callback: (values: ArticleType) => void): AnyAction {
   const resp = fetch(`http://localhost:8000/api/articles/${id}`,
     {
       method: 'PUT',
@@ -124,7 +117,6 @@ export function createComment(body: string) {
       headers: { 'Content-Type': 'application/ld+json' },
       body: JSON.stringify(body)
     }).then(response => response.json())
-    console.log(request)
 
   return {
     type: COMMENT_CREATED,
@@ -134,7 +126,7 @@ export function createComment(body: string) {
 
 export function fetchComments(id: number) {
   const promise = axios.get(`http://localhost:8000/api/articles/${id}/comments`)
-    .then(response => response.data['hydra:member']);
+    .then(response => console.log(response.data));
   return {
     type: FETCH_COMMENTS,
     payload: promise

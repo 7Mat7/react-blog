@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware, Reducer } from 'redux';
+import { createStore, combineReducers, applyMiddleware, Reducer, CombinedState } from 'redux';
 import reduxPromise from 'redux-promise';
 import logger from 'redux-logger';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { createHistory as history } from 'history';
-import { CookiesProvider } from 'react-cookie'
+import { createBrowserHistory as history } from 'history';
+import createSagaMiddleware from 'redux-saga';
+import { CookiesProvider } from 'react-cookie';
+import { rootSaga } from "./saga/saga";
 
 import ArticlesIndex from './containers/articles_index';
 import ArticlesShow from './containers/articles_show';
@@ -27,14 +29,16 @@ import commentsReducer from './reducers/comments_reducer';
 import { reducer as formReducer } from 'redux-form';
 import { State } from './interface';
 
-const initialState = {
+const initialState: State = {
   articles: [],
   authors: [],
   author: null,
-  comments: []
+  comments: [],
+  article: null,
+  comment: null,
 };
 
-const reducers: Reducer<State> = combineReducers({
+const rootReducer = combineReducers({
   articles: articlesReducer,
   authors: authorsReducer,
   author: authorReducer,
@@ -42,12 +46,13 @@ const reducers: Reducer<State> = combineReducers({
   form: formReducer
 });
 
-const middlewares = applyMiddleware(reduxPromise, logger);
+const sagaMiddleware = createSagaMiddleware();
+const middlewares = applyMiddleware(reduxPromise, logger,sagaMiddleware);
 
+sagaMiddleware.run(rootSaga);
 // render an instance of the component in the DOM
 ReactDOM.render(
-  <CookiesProvider>
-    <Provider store={createStore(reducers, initialState, middlewares)}>
+    <Provider store={createStore(rootReducer, initialState, middlewares)}>
       <Router history={history}>
         <Switch>
           <Route path="/" exact component={Home} />
@@ -58,7 +63,6 @@ ReactDOM.render(
           <Route path="/articles/:id" component={ArticlesShow} />
         </Switch>
       </Router>
-    </Provider>
-  </CookiesProvider>,
+    </Provider>,
   document.getElementById('root')
 );

@@ -1,9 +1,11 @@
+import { AnyAction } from 'redux';
 import { FETCH_ARTICLES, FETCH_ARTICLE, DELETE_ARTICLE, ARTICLE_UPDATED } from '../actions';
+import { ArticleType } from '../interface';
 
-export default function(state = [], action) {
+export default function(state: ArticleType[] = [], action: AnyAction) {
   switch (action.type) {
     case FETCH_ARTICLES:
-      return action.payload;
+      return {...state};
     case FETCH_ARTICLE:
       return [action.payload];
     case ARTICLE_UPDATED:

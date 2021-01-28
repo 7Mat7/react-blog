@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { AnyAction, bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 
 import { fetchArticles } from '../actions/index';
 import Article from '../components/article';
-import { ArticleType, AuthorType } from '../interface';
+import { ArticleType, AuthorType, State } from '../interface';
 
 interface Props {
   articles: ArticleType[];
@@ -48,14 +48,14 @@ class ArticlesIndex extends Component<Props> {
   }
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state: State) {
   return ({
     articles: state.articles,
     author: state.author
   });
 }
 
-function mapDispatchToProps(dispatch: any) {
+function mapDispatchToProps(dispatch: Dispatch) {
   return bindActionCreators({ fetchArticles }, dispatch);
 }
 

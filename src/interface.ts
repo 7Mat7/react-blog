@@ -1,6 +1,10 @@
 export interface State {
-    articles: ArticleType;
-    authors: AuthorType;
+    articles: ArticleType[];
+    authors: AuthorType[];
+    author: AuthorType;
+    comments: CommentType[];
+    article: ArticleType;
+    comment: CommentType;
   }
 
 export interface AuthorType {
