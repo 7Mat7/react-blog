@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { AnyAction, bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 
 import { fetchAuthors, fetchArticles } from '../actions/index';
 import Article from '../components/article';
-import { ArticleType, AuthorType } from '../interface';
+import { ArticleType, AuthorType, State } from '../interface';
 
 interface Props {
   fetchAuthors: () => AnyAction;
   fetchArticles: () => AnyAction;
   articles: ArticleType[];
   authors: AuthorType[];
-  author: AuthorType;
+  author: AuthorType | null;
 }
 
 class AuthorsIndex extends Component<Props> {
@@ -21,9 +21,9 @@ class AuthorsIndex extends Component<Props> {
     this.props.fetchArticles();
   }
 
-  handleLoad = (author) => {
+  handleLoad = (author: any) => {
     const articles = this.props.articles.filter(article => {
-      return (article['author']['@id'] === `/api/authors/${author.id}`);
+      return (article.author.id === `/api/authors/${author.id}`);
       });
     return (
       articles.map((article) => {
@@ -72,7 +72,7 @@ class AuthorsIndex extends Component<Props> {
   }
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state: State) {
   return ({
     authors: state.authors,
     articles: state.articles,
@@ -80,7 +80,7 @@ function mapStateToProps(state) {
   });
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch) {
   return bindActionCreators({ fetchAuthors, fetchArticles }, dispatch);
 }
 

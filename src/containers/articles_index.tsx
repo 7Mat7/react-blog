@@ -10,7 +10,7 @@ import { ArticleType, AuthorType, State } from '../interface';
 interface Props {
   articles: ArticleType[];
   fetchArticles: () => AnyAction;
-  author: AuthorType;
+  author: AuthorType | null;
 }
 
 class ArticlesIndex extends Component<Props> {

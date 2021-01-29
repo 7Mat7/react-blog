@@ -62,7 +62,7 @@ export function updateArticle(body: ArticleType, id: number, callback: (values: 
   };
 }
 
-export function deleteArticle(article: ArticleType, callback: any) {
+export function deleteArticle(article: ArticleType, callback: () => void) {
   fetch(`http://localhost:8000/api/articles/${article.id}`,
     { method: 'DELETE'})
     .then(r => r.text())
@@ -74,7 +74,7 @@ export function deleteArticle(article: ArticleType, callback: any) {
   };
 }
 
-export function fetchAuthors() {
+export const fetchAuthors = (): AnyAction => {
   const promise = fetch(`http://localhost:8000/api/authors?page=1`,
     {
       method: 'GET',
@@ -95,7 +95,7 @@ export function setAuthor(author: AuthorType) {
   }
 }
 
-export function createAuthor(body: string, callback: any) {
+export function createAuthor(body: Partial<AuthorType>, callback: (values: any) => void): AnyAction {
   const request = fetch(`http://localhost:8000/api/authors`,
     {
       method: 'POST',

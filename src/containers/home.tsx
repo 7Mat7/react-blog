@@ -1,45 +1,46 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
-import { History } from 'history';
+import { reduxForm, Field, InjectedFormProps, FormSubmitHandler } from 'redux-form';
+import { history } from '../index';
 import { fetchAuthors, setAuthor, createAuthor } from '../actions/index';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { AuthorType, State } from '../interface';
-import { withCookies } from 'react-cookie';
 
 interface Props {
   fetchAuthors: () => AnyAction;
-  authors: AuthorType[];
-  setAuthor: (AuthorType) => AnyAction;
-  createAuthor: (values: string, callback: any) => AnyAction;
-  history: History;
-  handleSubmit: any;
+  authors: AuthorType[] | undefined;
+  setAuthor: (arg: AuthorType) => AnyAction;
+  createAuthor: typeof createAuthor;
 }
 
-class Home extends Component<Props> {
+class Home extends Component<InjectedFormProps<AuthorType, Props>& Props> {
   componentWillMount() {
     this.props.fetchAuthors();
   }
 
-  onSubmit = (values) => {
-    const author = this.props.authors.find((author) => {
+  onSubmit = (values: Partial<AuthorType>): AuthorType => {
+    let author = null;
+    if (this.props.authors){
+      author = this.props.authors.find((author) => {
         return (author.firstname === values.firstname
           && author.lastname === values.lastname);
       })
-
+    }
     if (author) {
       this.props.setAuthor(author);
-      this.props.history.push('/articles'); // Navigate after submit
-
+      history.push('/articles'); // Navigate after submit
       return author;
+
     } else {
-      this.props.createAuthor(values, (author) => {
-        this.props.history.push('/articles'); // Navigate after submit
-        this.props.setAuthor(author)
+        const {payload} = this.props.createAuthor(values, (author) => {
+        this.props.setAuthor(author);
+        history.push('/articles'); // Navigate after submit
         return author;
-      })
+      });
+      return payload;
     }
   }
+
 
   render() {
     return (
@@ -58,7 +59,7 @@ class Home extends Component<Props> {
           <h2>Log in to discover</h2>
           </div>
 
-          <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+          <form onSubmit={this.props.handleSubmit((this.onSubmit as unknown) as FormSubmitHandler<AuthorType, Props, string>)}>
             <div className="form-group">
               <label htmlFor="InputFirstName">first name</label>
               <Field name="firstname" type="text" placeholder="Your first name" component="input" className="form-control" />
@@ -88,4 +89,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
   return bindActionCreators({ fetchAuthors, setAuthor, createAuthor }, dispatch);
 }
 
-export default reduxForm({ form: 'homeForm' })(connect(mapStateToProps, mapDispatchToProps)(Home));
+export default reduxForm<AuthorType, Props>({ form: 'homeForm' })(connect(mapStateToProps, mapDispatchToProps)(Home));

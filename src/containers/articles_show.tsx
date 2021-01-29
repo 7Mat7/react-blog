@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { AnyAction, bindActionCreators } from 'redux';
-import { Link, Redirect, withRouter } from 'react-router-dom';
-import { History } from 'history';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import { Link, Redirect, withRouter, match } from 'react-router-dom';
+import { history } from '../index';
 
-import { fetchArticle, fetchArticles, deleteArticle } from '../actions/index';
+import { fetchArticle, fetchArticles, deleteArticle, createComment } from '../actions/index';
 import CommentsIndex from './comments_index';
 import CommentsNew from './comments_new';
-import { ArticleType, AuthorType } from '../interface';
+import { ArticleType, AuthorType, State } from '../interface';
 
-interface Props {
-  article: ArticleType;
-  fetchArticle: (url: string) => AnyAction;
-  deleteArticle: (article: ArticleType, callback: any) => AnyAction;
-  history: History;
-  author: AuthorType;
-  match: any;
+interface Props extends ownProps {
+  article: ArticleType | undefined;
+  fetchArticle: (url: string) => Promise<AnyAction>;
+  deleteArticle: (article: ArticleType, callback: () => void) => AnyAction;
+  author: AuthorType | null;
+}
+
+interface ownProps {
+  match: match<{id:string}>;
 }
 
 class ArticlesShow extends Component<Props> {
@@ -26,13 +28,15 @@ class ArticlesShow extends Component<Props> {
   }
 
   handleClick = () => {
-    this.props.deleteArticle(this.props.article, () => {
-      this.props.history.push('/articles');
-    });
+    if (this.props.article){
+      this.props.deleteArticle(this.props.article, () => {
+        history.push('/articles');
+      });
   }
+}
 
   renderIfAuthor = () => {
-    if (this.props.article.author["@id"] === `/api/authors/${this.props.author.id}`) {
+    if (this.props.article && this.props.author && this.props.article.author.id === `/api/authors/${this.props.author.id}`) {
       return (
         <div>
           <button className="btn btn-primary btn-cta" style={{margin: "12px"}} onClick={this.handleClick}>
@@ -51,7 +55,7 @@ class ArticlesShow extends Component<Props> {
       return <Redirect to='/'/>
     }
     const article = this.props.article;
-    if (!article) {
+    if (!article || !this.props.article) {
       return (
           <Link to="/articles" key="sthing else">Back to list</Link>
         );
@@ -68,7 +72,7 @@ class ArticlesShow extends Component<Props> {
           Back
         </Link>
         <div>
-          <CommentsNew article={this.props.article} />
+          <CommentsNew article={this.props.article} createComment={createComment} />
           <CommentsIndex id={this.props.article.id}/>
         </div>
       </div>
@@ -77,7 +81,7 @@ class ArticlesShow extends Component<Props> {
   }
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: State, ownProps: ownProps) {
   const idFromUrl = parseInt(ownProps.match.params.id, 10);
   return ({
     article: state.articles.find(c => c.id === idFromUrl),
@@ -85,7 +89,7 @@ function mapStateToProps(state, ownProps) {
     });
 }
 
-function mapDispatchToProps(dispatch: any) {
+function mapDispatchToProps(dispatch: Dispatch) {
   return bindActionCreators({ fetchArticle, fetchArticles, deleteArticle }, dispatch);
 }
 

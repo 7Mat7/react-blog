@@ -8,7 +8,7 @@ export interface State {
   }
 
 export interface AuthorType {
-    id: number;
+    id: string;
     firstname: string;
     lastname: string;
     articles: ArticleType[];

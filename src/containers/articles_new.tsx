@@ -3,23 +3,23 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, InjectedFormProps } from 'redux-form';
 import { Link, Redirect } from 'react-router-dom';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { History } from 'history';
+import { history } from '../index';
 
 import { createArticle } from '../actions/index';
 import { ArticleType, AuthorType, State } from '../interface';
 
 interface Props {
-  author: AuthorType;
-  history: History;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  author: AuthorType | null;
   createArticle: (body: string, callback: (arg: ArticleType) => void) => AnyAction;
 }
 
-class ArticlesNew extends Component<InjectedFormProps<ArticleType, Props>& Props> {
+class ArticlesNew extends Component<InjectedFormProps<AuthorType, Props>& Props> {
   onSubmit = (values: any) => {
-    Object.assign(values, {author: `/api/authors/${this.props.author.id}`});
+    if (this.props.author != null) {
+      Object.assign(values, {author: `/api/authors/${this.props.author.id}`});
+    }
     this.props.createArticle(values, (article) => {
-      this.props.history.push('/articles'); // Navigate after submit
+      history.push('/articles'); // Navigate after submit
       return article;
     });
   }
@@ -54,9 +54,8 @@ function mapStateToProps(state: State) {
   return ({ author: state.author });
 }
 
-
 function mapDispatchToProps(dispatch: Dispatch) {
   return bindActionCreators({ createArticle }, dispatch);
 }
 
-export default reduxForm({ form: 'newPostForm' })(connect(mapStateToProps, mapDispatchToProps)(ArticlesNew));
+export default reduxForm<AuthorType, Props>({ form: 'newPostForm' })(connect(mapStateToProps, mapDispatchToProps)(ArticlesNew));

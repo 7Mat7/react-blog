@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+
 import { reduxForm, Field, InjectedFormProps } from 'redux-form';
 import { Link, match, Redirect } from 'react-router-dom';
 import { fetchArticle, updateArticle } from '../actions/index';
-import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { ArticleType, AuthorType, State } from '../interface';
 import { history } from '../index';
 
