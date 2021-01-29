@@ -34,7 +34,7 @@ export function createArticle(body: string, callback: (values: any) => void): An
   };
 }
 
-export const fetchArticle = async (iri: string): Promise<AnyAction> => {
+export const fetchArticle = async (iri: string): Promise<any> => {
   try {
     const resp = await axios.get(`http://localhost:8000${iri}`);
     return {

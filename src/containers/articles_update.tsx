@@ -1,39 +1,44 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field, InjectedFormProps } from 'redux-form';
-import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
+import { Link, match, Redirect } from 'react-router-dom';
 import { fetchArticle, updateArticle } from '../actions/index';
 import { AnyAction, bindActionCreators, Dispatch } from 'redux';
 import { ArticleType, AuthorType, State } from '../interface';
+import { history } from '../index';
 
-interface Props {
-  article: ArticleType;
+interface Props extends ownProps {
+  article: ArticleType | undefined;
   fetchArticle: (iri: string) => Promise<AnyAction>;
-  author: AuthorType;
+  author: AuthorType | null;
   updateArticle: (body: ArticleType, id: number, callback: (arg: ArticleType) => void) => AnyAction;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-type ownProps = RouteComponentProps<InjectedFormProps<ArticleType, Props>& Props>;
+interface ownProps {
+  match: match<{id:string}>;
+}
 
-class ArticlesUpdate extends PureComponent<RouteComponentProps<InjectedFormProps<ArticleType, Props>& Props>> {
+class ArticlesUpdate extends PureComponent<InjectedFormProps<ArticleType, Props>& Props> {
   componentDidMount() {
-    if (!this.props.article.id) {
-      this.props.fetchArticle(`/api/articles/${this.props.match.params.id}`);
+    if (!this.props.article || !this.props.article.id) {
+        this.props.fetchArticle(`/api/articles/${this.props.match.params.id}`);
+      }
+    }
+
+  onSubmit = (values: ArticleType) => {
+    if(this.props.article && this.props.author != null) {
+      const id = this.props.article.id;
+      Object.assign(values, {author: `/api/authors/${this.props.author.id}`});
+      this.props.updateArticle(values, id, (article) => {
+        history.push('/articles');
+        return article;
+      });
     }
   }
 
-  onSubmit = (values: ArticleType) => {
-    const id = this.props.article.id;
-    Object.assign(values, {author: `/api/authors/${this.props.author.id}`});
-    this.props.updateArticle(values, id, (article) => {
-      this.props.history.push('/articles');
-      return article;
-    });
-  }
-
   render() {
-    if(this.props.author === null) {
+    if(this.props.author === null || !this.props.article) {
       return <Redirect to='/'/>
     }
     return (
@@ -71,4 +76,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
   return bindActionCreators({ fetchArticle, updateArticle }, dispatch);
 }
 
-export default reduxForm({ form: 'updatePostForm' })(connect(mapStateToProps, mapDispatchToProps)(ArticlesUpdate));
+export default reduxForm<ArticleType, Props>({ form: 'updatePostForm' })(connect(mapStateToProps, mapDispatchToProps)(ArticlesUpdate));

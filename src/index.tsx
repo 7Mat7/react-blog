@@ -1,13 +1,11 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware, Reducer, CombinedState } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import reduxPromise from 'redux-promise';
 import logger from 'redux-logger';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { createBrowserHistory as history } from 'history';
+import { createBrowserHistory } from 'history';
 import createSagaMiddleware from 'redux-saga';
-import { CookiesProvider } from 'react-cookie';
 import { rootSaga } from "./saga/saga";
 
 import ArticlesIndex from './containers/articles_index';
@@ -19,7 +17,7 @@ import AuthorsIndex from './containers/authors_index';
 
 import Home from './containers/home';
 
-import '../assets/stylesheets/application.scss';
+import './assets/stylesheets/application.scss';
 
 import articlesReducer from './reducers/articles_reducer';
 import authorsReducer from './reducers/authors_reducer';
@@ -29,7 +27,7 @@ import commentsReducer from './reducers/comments_reducer';
 import { reducer as formReducer } from 'redux-form';
 import { State } from './interface';
 
-const initialState: State = {
+export const initialState: State = {
   articles: [],
   authors: [],
   author: null,
@@ -46,14 +44,14 @@ const rootReducer = combineReducers({
   form: formReducer
 });
 
+export const history = createBrowserHistory();
 const sagaMiddleware = createSagaMiddleware();
 const middlewares = applyMiddleware(reduxPromise, logger,sagaMiddleware);
 
-sagaMiddleware.run(rootSaga);
 // render an instance of the component in the DOM
 ReactDOM.render(
     <Provider store={createStore(rootReducer, initialState, middlewares)}>
-      <Router history={history}>
+      <Router >
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/articles" exact component={ArticlesIndex} />
@@ -66,3 +64,5 @@ ReactDOM.render(
     </Provider>,
   document.getElementById('root')
 );
+
+sagaMiddleware.run(rootSaga);
