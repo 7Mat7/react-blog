@@ -1,6 +1,6 @@
-import { FETCH_AUTHORS, SET_AUTHOR } from '../actions';
+import { FETCH_AUTHORS, SET_AUTHOR } from "../actions";
 
-export default function(state = [], action: any) {
+export default function (state = [], action: any) {
   switch (action.type) {
     case FETCH_AUTHORS:
       return action.payload;

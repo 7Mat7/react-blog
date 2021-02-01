@@ -1,9 +1,9 @@
-import { Component } from 'react';
-import { AnyAction, bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
+import React from "react";
+import { AnyAction, bindActionCreators, Dispatch } from "redux";
+import { connect } from "react-redux";
 
-import { fetchComments } from '../actions/index';
-import { CommentType, State } from '../interface';
+import { fetchComments } from "../actions/index";
+import { CommentType, State } from "../interface";
 
 interface Props {
   id: number;
@@ -11,7 +11,7 @@ interface Props {
   comments: CommentType[];
 }
 
-class CommentsIndex extends Component<Props> {
+class CommentsIndex extends React.Component<Props> {
   componentDidMount() {
     const test = this.props.fetchComments(this.props.id);
     console.log(test);
@@ -19,9 +19,9 @@ class CommentsIndex extends Component<Props> {
 
   render() {
     return (
-      <div style={{marginTop: "24px"}}>
+      <div style={{ marginTop: "24px" }}>
         {this.props.comments.map((comment) => {
-          return(
+          return (
             <div className="post-item" key={comment.id}>
               {comment.content}
             </div>
@@ -33,9 +33,9 @@ class CommentsIndex extends Component<Props> {
 }
 
 function mapStateToProps(state: State) {
-  return ({
+  return {
     comments: state.comments,
-  });
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {

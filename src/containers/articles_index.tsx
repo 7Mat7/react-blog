@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import { AnyAction, bindActionCreators, Dispatch } from 'redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
+import { AnyAction, bindActionCreators, Dispatch } from "redux";
 
-import { fetchArticles } from '../actions/index';
-import Article from '../components/article';
-import { ArticleType, AuthorType, State } from '../interface';
+import { fetchArticles } from "../actions/index";
+import Article from "../components/article";
+import { ArticleType, AuthorType, State } from "../interface";
 
 interface Props {
   articles: ArticleType[];
@@ -14,23 +14,21 @@ interface Props {
 }
 
 class ArticlesIndex extends Component<Props> {
-  componentWillMount() {
+  componentDidMount() {
+    console.log("'component did mount'");
     this.props.fetchArticles();
   }
 
   renderPosts() {
-    return (
-    this.props.articles.map((article) => {
-          return (
-            <Article article={article} key={article.id}/>
-          );
-        })
-    );
+    return this.props.articles.map((article) => {
+      return <Article article={article} key={article.id} />;
+    });
   }
 
   render() {
-    if(this.props.author === null) {
-      return <Redirect to='/'/>
+    console.log("go render");
+    if (this.props.author === null) {
+      return <Redirect to="/" />;
     }
     return (
       <div>
@@ -38,21 +36,21 @@ class ArticlesIndex extends Component<Props> {
           <h3>Blog</h3>
 
           <Link className="btn btn-primary btn-cta" to="/articles/new">
-            Let's write a post!
+            {"Let's write a post!"}
           </Link>
         </div>
-        <Link to="/authors" >Browse by Author</Link>
+        <Link to="/authors">Browse by Author</Link>
         {this.renderPosts().reverse()}
       </div>
     );
   }
-};
+}
 
 function mapStateToProps(state: State) {
-  return ({
+  return {
     articles: state.articles,
-    author: state.author
-  });
+    author: state.author,
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {

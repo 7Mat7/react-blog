@@ -1,6 +1,7 @@
-import { SET_AUTHOR, AUTHOR_CREATED } from '../actions';
+import { AnyAction } from "redux";
+import { SET_AUTHOR, AUTHOR_CREATED } from "../actions";
 
-export default function(state = [], action) {
+export default function (state = [], action: AnyAction): any {
   switch (action.type) {
     case SET_AUTHOR:
       return action.payload;
