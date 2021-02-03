@@ -13,9 +13,8 @@ export const DELETE_ARTICLE = "DELETE_ARTICLE";
 export const SET_AUTHOR = "SET_AUTHOR";
 export const AUTHOR_CREATED = "AUTHOR_CREATED";
 
-export const COMMENT_CREATED = "COMMENT_CREATED";
-export const REQUEST_COMMENTS = "REQUEST_COMMENTS";
-export const RECEIVE_COMMENTS = "RECEIVE_COMMENTS";
+export const REQUEST_CREATE_COMMENT = "REQUEST_CREATE_COMMENT";
+export const RECEIVE_NEW_COMMENT = "RECEIVE_NEW_COMMENT";
 
 import { AnyAction } from "redux";
 import { ArticleType, AuthorType } from "../interface";
@@ -32,8 +31,8 @@ export const requestAuthors = (): AnyAction => ({ type: REQUEST_AUTHORS });
 export const receiveAuthors = (data: any): AnyAction => ({ type: RECEIVE_AUTHORS, data });
 
 // Comments Actions
-export const requestComments = (id: number): AnyAction => ({ id, type: REQUEST_COMMENTS });
-export const receiveComments = (data: any): AnyAction => ({ data, type: RECEIVE_COMMENTS });
+export const requestCreateComment = (body: string): AnyAction => ({ body, type: REQUEST_CREATE_COMMENT });
+export const receiveNewComment = (data: any): AnyAction => ({ data, type: RECEIVE_NEW_COMMENT });
 
 export function updateArticle(body: ArticleType, id: number, callback: (values: ArticleType) => void): AnyAction {
   const resp = fetch(`http://localhost:8000/api/articles/${id}`, {
@@ -78,19 +77,6 @@ export function createAuthor(body: Partial<AuthorType>, callback: (values: any) 
     .then(callback);
   return {
     type: AUTHOR_CREATED,
-    payload: request,
-  };
-}
-
-export function createComment(body: string) {
-  const request = fetch("http://localhost:8000/api/comments", {
-    method: "POST",
-    headers: { "Content-Type": "application/ld+json" },
-    body: JSON.stringify(body),
-  }).then((response) => response.json());
-
-  return {
-    type: COMMENT_CREATED,
     payload: request,
   };
 }

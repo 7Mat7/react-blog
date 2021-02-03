@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import { AnyAction, bindActionCreators, Dispatch } from "redux";
 
-import { createComment } from "../actions/index";
+import { requestCreateComment } from "../actions/index";
 import { ArticleType } from "../interface";
 
 interface Props {
-  createComment: (values: string, postId: number) => AnyAction;
+  requestCreateComment: (values: string, postId: number) => AnyAction;
   article: ArticleType;
 }
 
@@ -15,7 +15,7 @@ class CommentsNew extends React.Component<InjectedFormProps<ArticleType, Props> 
   onSubmit = (values: any) => {
     const postId = this.props.article.id;
     Object.assign(values, { article: `/api/articles/${postId}` });
-    this.props.createComment(values, postId);
+    this.props.requestCreateComment(values, postId);
   };
 
   render() {
@@ -43,7 +43,7 @@ class CommentsNew extends React.Component<InjectedFormProps<ArticleType, Props> 
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ createComment }, dispatch);
+  return bindActionCreators({ requestCreateComment }, dispatch);
 }
 
 export default reduxForm<ArticleType, Props>({ form: "newCommentForm" })(

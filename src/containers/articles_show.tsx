@@ -4,8 +4,8 @@ import { AnyAction, bindActionCreators, Dispatch } from "redux";
 import { Link, Redirect, match } from "react-router-dom";
 import { history } from "../index";
 
-import { requestArticle, requestArticles, deleteArticle, createComment } from "../actions/index";
-import CommentsIndex from "./comments_index";
+import { requestArticle, requestArticles, deleteArticle, requestCreateComment } from "../actions/index";
+import CommentsIndex from "../components/comments_index";
 import CommentsNew from "./comments_new";
 import { ArticleType, AuthorType, State } from "../interface";
 
@@ -83,8 +83,8 @@ class ArticlesShow extends React.Component<Props> {
         </div>
         <Link to="/articles">Back</Link>
         <div>
-          <CommentsNew article={this.props.article} createComment={createComment} />
-          <CommentsIndex id={this.props.article.id} />
+          <CommentsNew article={this.props.article} requestCreateComment={requestCreateComment} />
+          <CommentsIndex article={this.props.article} />
         </div>
       </div>
     );

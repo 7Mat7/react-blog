@@ -8,7 +8,7 @@ interface Props {
 }
 
 class Article extends Component<Props> {
-  render() {
+  render(): JSX.Element {
     return (
       <div className="article-smallad" key={this.props.article.id}>
         <Link to={`/articles/${this.props.article.id}`}>

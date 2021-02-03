@@ -30,10 +30,14 @@ export const fetchAuthors = async (): Promise<any> => {
   }
 };
 
-export const fetchComments = async (action: AnyAction): Promise<any> => {
+export const postNewComment = async (action: AnyAction): Promise<any> => {
   try {
-    const response = await fetch(`http://localhost:8000/api/articles/${action.id}/comments`);
-    const data = response.json;
+    const response = await fetch("http://localhost:8000/api/comments", {
+      method: "POST",
+      headers: { "Content-Type": "application/ld+json" },
+      body: JSON.stringify(action.body),
+    });
+    const data = await response.json;
     return data;
   } catch (e) {
     console.log(e);
