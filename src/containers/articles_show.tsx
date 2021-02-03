@@ -1,17 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
 import { AnyAction, bindActionCreators, Dispatch } from "redux";
-import { Link, Redirect, withRouter, match } from "react-router-dom";
+import { Link, Redirect, match } from "react-router-dom";
 import { history } from "../index";
 
-import { fetchArticle, fetchArticles, deleteArticle, createComment } from "../actions/index";
+import { requestArticle, requestArticles, deleteArticle, createComment } from "../actions/index";
 import CommentsIndex from "./comments_index";
 import CommentsNew from "./comments_new";
 import { ArticleType, AuthorType, State } from "../interface";
 
 interface Props extends ownProps {
   article: ArticleType | undefined;
-  fetchArticle: (url: string) => Promise<AnyAction>;
+  requestArticle: (url: string) => AnyAction;
   deleteArticle: (article: ArticleType, callback: () => void) => AnyAction;
   author: AuthorType | null;
 }
@@ -23,7 +23,7 @@ interface ownProps {
 class ArticlesShow extends React.Component<Props> {
   componentDidMount() {
     if (!this.props.article) {
-      this.props.fetchArticle(`/api/articles/${this.props.match.params.id}`);
+      this.props.requestArticle(`/api/articles/${this.props.match.params.id}`);
     }
   }
 
@@ -100,7 +100,7 @@ function mapStateToProps(state: State, ownProps: ownProps) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ fetchArticle, fetchArticles, deleteArticle }, dispatch);
+  return bindActionCreators({ requestArticle, requestArticles, deleteArticle }, dispatch);
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ArticlesShow));
+export default connect(mapStateToProps, mapDispatchToProps)(ArticlesShow);

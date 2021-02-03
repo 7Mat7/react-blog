@@ -4,7 +4,7 @@ import { AnyAction, bindActionCreators, Dispatch } from "redux";
 
 import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import { Link, match, Redirect } from "react-router-dom";
-import { fetchArticle, updateArticle } from "../actions/index";
+import { requestArticle, updateArticle } from "../actions/index";
 import { ArticleType, AuthorType, State } from "../interface";
 import { history } from "../index";
 
@@ -85,7 +85,7 @@ function mapStateToProps(state: State, ownProps: ownProps) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ fetchArticle, updateArticle }, dispatch);
+  return bindActionCreators({ requestArticle, updateArticle }, dispatch);
 }
 
 export default reduxForm<ArticleType, Props>({ form: "updatePostForm" })(

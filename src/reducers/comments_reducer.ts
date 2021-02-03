@@ -1,13 +1,13 @@
 import { AnyAction } from "redux";
-import { COMMENT_CREATED, FETCH_COMMENTS } from "../actions";
+import { COMMENT_CREATED, RECEIVE_COMMENTS } from "../actions";
 import { CommentType } from "../interface";
 
-export default function (state: CommentType[] = [], action: AnyAction) {
+export default function (state: CommentType[] = [], action: AnyAction): any {
   switch (action.type) {
-    case FETCH_COMMENTS:
+    case RECEIVE_COMMENTS:
       return action.payload;
     case COMMENT_CREATED:
-      return [...state, action.payload];
+      return [action.payload];
     default:
       return state;
   }

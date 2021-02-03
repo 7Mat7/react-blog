@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { AnyAction, bindActionCreators, Dispatch } from "redux";
 
-import { fetchAuthors, fetchArticles } from "../actions/index";
+import { requestAuthors, requestArticles } from "../actions/index";
 import Article from "../components/article";
 import { ArticleType, AuthorType, State } from "../interface";
 
 interface Props {
-  fetchAuthors: () => AnyAction;
+  requestAuthors: () => AnyAction;
   fetchArticles: () => AnyAction;
   articles: ArticleType[];
   authors: AuthorType[];
@@ -17,7 +17,7 @@ interface Props {
 
 class AuthorsIndex extends React.Component<Props> {
   componentDidMount() {
-    this.props.fetchAuthors();
+    this.props.requestAuthors();
     this.props.fetchArticles();
   }
 
@@ -84,7 +84,7 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ fetchAuthors, fetchArticles }, dispatch);
+  return bindActionCreators({ requestAuthors, requestArticles }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthorsIndex);

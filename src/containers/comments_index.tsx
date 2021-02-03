@@ -2,33 +2,36 @@ import React from "react";
 import { AnyAction, bindActionCreators, Dispatch } from "redux";
 import { connect } from "react-redux";
 
-import { fetchComments } from "../actions/index";
+import { requestComments } from "../actions/index";
 import { CommentType, State } from "../interface";
 
 interface Props {
   id: number;
-  fetchComments: (id: number) => AnyAction;
-  comments: CommentType[];
+  requestComments: (id: number) => AnyAction;
+  comments: CommentType[] | null;
 }
 
 class CommentsIndex extends React.Component<Props> {
   componentDidMount() {
-    const test = this.props.fetchComments(this.props.id);
-    console.log(test);
+    this.props.requestComments(this.props.id);
   }
 
   render() {
-    return (
-      <div style={{ marginTop: "24px" }}>
-        {this.props.comments.map((comment) => {
-          return (
-            <div className="post-item" key={comment.id}>
-              {comment.content}
-            </div>
-          );
-        })}
-      </div>
-    );
+    if (this.props.comments) {
+      return (
+        <div style={{ marginTop: "24px" }} key="unikey">
+          {this.props.comments.map((comment) => {
+            return (
+              <div className="post-item" key={comment.id}>
+                {comment.content}
+              </div>
+            );
+          })}
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -39,7 +42,7 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ fetchComments }, dispatch);
+  return bindActionCreators({ requestComments }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommentsIndex);

@@ -1,12 +1,7 @@
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { createStore, combineReducers, applyMiddleware } from "redux";
-import reduxPromise from "redux-promise";
-import logger from "redux-logger";
-import { Router as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import createSagaMiddleware from "redux-saga";
-import { rootSaga } from "./saga/saga";
 
 import ArticlesIndex from "./containers/articles_index";
 import ArticlesShow from "./containers/articles_show";
@@ -19,37 +14,15 @@ import Home from "./containers/home";
 
 import "./assets/stylesheets/application.scss";
 
-import articlesReducer from "./reducers/articles_reducer";
-import authorsReducer from "./reducers/authors_reducer";
-import authorReducer from "./reducers/author_reducer";
-import commentsReducer from "./reducers/comments_reducer";
-
-import { reducer as formReducer } from "redux-form";
-import { State } from "./interface";
-
-export const initialState: Partial<State> = {
-  articles: [],
-  authors: [],
-  author: null,
-  comments: [],
-};
-
-const rootReducer = combineReducers({
-  articles: articlesReducer,
-  authors: authorsReducer,
-  author: authorReducer,
-  comments: commentsReducer,
-  form: formReducer,
-});
+import { ConnectedRouter } from "connected-react-router";
+import { store } from "./store";
 
 export const history = createBrowserHistory();
-const sagaMiddleware = createSagaMiddleware();
-const middlewares = applyMiddleware(reduxPromise, logger, sagaMiddleware);
 
 // render an instance of the component in the DOM
 ReactDOM.render(
-  <Provider store={createStore(rootReducer, initialState, middlewares)}>
-    <Router history={history}>
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/articles" exact component={ArticlesIndex} />
@@ -58,9 +31,7 @@ ReactDOM.render(
         <Route path="/articles/:id/update" exact component={ArticlesUpdate} />
         <Route path="/articles/:id" component={ArticlesShow} />
       </Switch>
-    </Router>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById("root"),
 );
-
-sagaMiddleware.run(rootSaga);

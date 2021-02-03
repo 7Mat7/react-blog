@@ -2,7 +2,7 @@ export interface State {
   articles: ArticleType[];
   authors: AuthorType[];
   author: AuthorType | null;
-  comments: CommentType[];
+  comments: CommentType[] | null;
   article: ArticleType | null;
   comment: CommentType | null;
 }

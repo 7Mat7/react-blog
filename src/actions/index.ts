@@ -1,58 +1,39 @@
-export const FETCH_ARTICLES = "FETCH_ARTICLES";
+export const REQUEST_ARTICLES = "REQUEST_ARTICLES";
+export const RECEIVE_ARTICLES = "RECEIVE_ARTICLES";
+export const REQUEST_ARTICLE = "REQUEST_ARTICLE";
+export const RECEIVE_ARTICLE = "RECEIVE_ARTICLE";
+
+export const REQUEST_AUTHORS = "REQUEST_AUTHORS";
+export const RECEIVE_AUTHORS = "RECEIVE_AUTHORS";
+
 export const ARTICLE_CREATED = "ARTICLE_CREATED";
 export const ARTICLE_UPDATED = "ARTICLE_UPDATED";
-export const FETCH_ARTICLE = "FETCH_ARTICLE";
 export const DELETE_ARTICLE = "DELETE_ARTICLE";
 
 export const SET_AUTHOR = "SET_AUTHOR";
 export const AUTHOR_CREATED = "AUTHOR_CREATED";
-export const FETCH_AUTHORS = "FETCH_AUTHORS";
 
 export const COMMENT_CREATED = "COMMENT_CREATED";
-export const FETCH_COMMENTS = "FETCH_COMMENTS";
+export const REQUEST_COMMENTS = "REQUEST_COMMENTS";
+export const RECEIVE_COMMENTS = "RECEIVE_COMMENTS";
 
-import axios from "axios";
 import { AnyAction } from "redux";
 import { ArticleType, AuthorType } from "../interface";
 
-export function fetchArticles(): AnyAction {
-  const request = fetch("http://localhost:8000/api/articles?page=1", {
-    method: "GET",
-    headers: { accept: "application/json" },
-  }).then((response) => response.json());
+//Articles Actions
+export const requestArticles = (): AnyAction => ({ type: REQUEST_ARTICLES });
+export const receiveArticles = (data: any): AnyAction => ({ data, type: RECEIVE_ARTICLES });
 
-  return {
-    type: FETCH_ARTICLES,
-    payload: request,
-  };
-}
+export const requestArticle = (iri: string): AnyAction => ({ iri, type: REQUEST_ARTICLE });
+export const receiveArticle = (data: any): AnyAction => ({ data, type: RECEIVE_ARTICLE });
 
-export function createArticle(body: string, callback: (values: any) => void): AnyAction {
-  const request = fetch("http://localhost:8000/api/articles", {
-    method: "POST",
-    headers: { "Content-Type": "application/ld+json" },
-    body: JSON.stringify(body),
-  })
-    .then((response) => response.json())
-    .then(callback);
+// Authors Actions
+export const requestAuthors = (): AnyAction => ({ type: REQUEST_AUTHORS });
+export const receiveAuthors = (data: any): AnyAction => ({ type: RECEIVE_AUTHORS, data });
 
-  return {
-    type: ARTICLE_CREATED,
-    payload: request,
-  };
-}
-
-export const fetchArticle = async (iri: string): Promise<any> => {
-  try {
-    const resp = await axios.get(`http://localhost:8000${iri}`);
-    return {
-      type: FETCH_ARTICLE,
-      payload: resp.data,
-    };
-  } catch (err) {
-    console.error(err);
-  }
-};
+// Comments Actions
+export const requestComments = (id: number): AnyAction => ({ id, type: REQUEST_COMMENTS });
+export const receiveComments = (data: any): AnyAction => ({ data, type: RECEIVE_COMMENTS });
 
 export function updateArticle(body: ArticleType, id: number, callback: (values: ArticleType) => void): AnyAction {
   const resp = fetch(`http://localhost:8000/api/articles/${id}`, {
@@ -69,7 +50,7 @@ export function updateArticle(body: ArticleType, id: number, callback: (values: 
   };
 }
 
-export function deleteArticle(article: ArticleType, callback: () => void) {
+export function deleteArticle(article: ArticleType, callback: () => void): AnyAction {
   fetch(`http://localhost:8000/api/articles/${article.id}`, { method: "DELETE" })
     .then((r) => r.text())
     .then(callback);
@@ -79,18 +60,6 @@ export function deleteArticle(article: ArticleType, callback: () => void) {
     payload: article,
   };
 }
-
-export const fetchAuthors = (): AnyAction => {
-  const promise = fetch("http://localhost:8000/api/authors?page=1", {
-    method: "GET",
-    headers: { accept: "application/json" },
-  }).then((response) => response.json());
-
-  return {
-    type: FETCH_AUTHORS,
-    payload: promise,
-  };
-};
 
 export function setAuthor(author: AuthorType): AnyAction {
   return {
@@ -107,7 +76,6 @@ export function createAuthor(body: Partial<AuthorType>, callback: (values: any) 
   })
     .then((response) => response.json())
     .then(callback);
-  ("Mateo's");
   return {
     type: AUTHOR_CREATED,
     payload: request,
@@ -124,15 +92,5 @@ export function createComment(body: string) {
   return {
     type: COMMENT_CREATED,
     payload: request,
-  };
-}
-
-export function fetchComments(id: number) {
-  const promise = axios
-    .get(`http://localhost:8000/api/articles/${id}/comments`)
-    .then((response) => console.log(response.data));
-  return {
-    type: FETCH_COMMENTS,
-    payload: promise,
   };
 }

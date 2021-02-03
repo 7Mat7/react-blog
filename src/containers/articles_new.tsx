@@ -5,7 +5,7 @@ import { Link, Redirect } from "react-router-dom";
 import { AnyAction, bindActionCreators, Dispatch } from "redux";
 import { history } from "../index";
 
-import { createArticle } from "../actions/index";
+import { requestArticle } from "../actions/index";
 import { ArticleType, AuthorType, State } from "../interface";
 
 interface Props {
@@ -67,7 +67,7 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ createArticle }, dispatch);
+  return bindActionCreators({ requestArticle }, dispatch);
 }
 
 export default reduxForm<AuthorType, Props>({ form: "newPostForm" })(

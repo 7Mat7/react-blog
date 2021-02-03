@@ -1,11 +1,11 @@
-import { FETCH_AUTHORS, SET_AUTHOR } from "../actions";
+import { AnyAction } from "redux";
+import { RECEIVE_AUTHORS } from "../actions";
+import { AuthorType } from "../interface";
 
-export default function (state = [], action: any) {
+export default function (state: AuthorType[] = [], action: AnyAction): any {
   switch (action.type) {
-    case FETCH_AUTHORS:
-      return action.payload;
-    case SET_AUTHOR:
-      return [action.payload];
+    case RECEIVE_AUTHORS:
+      return action.data;
     default:
       return state;
   }

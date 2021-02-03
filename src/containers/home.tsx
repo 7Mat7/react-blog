@@ -2,12 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field, InjectedFormProps, FormSubmitHandler } from "redux-form";
 import { history } from "../index";
-import { fetchAuthors, setAuthor, createAuthor } from "../actions/index";
+import { requestAuthors, setAuthor, createAuthor } from "../actions/index";
 import { AnyAction, bindActionCreators, Dispatch } from "redux";
 import { AuthorType, State } from "../interface";
 
 interface Props {
-  fetchAuthors: () => AnyAction;
+  requestAuthors: () => AnyAction;
   authors: AuthorType[] | undefined;
   setAuthor: (arg: AuthorType) => AnyAction;
   createAuthor: typeof createAuthor;
@@ -15,7 +15,7 @@ interface Props {
 
 class Home extends React.Component<InjectedFormProps<AuthorType, Props> & Props> {
   componentDidMount() {
-    this.props.fetchAuthors();
+    this.props.requestAuthors();
   }
 
   onSubmit = (values: Partial<AuthorType>): AuthorType => {
@@ -28,8 +28,6 @@ class Home extends React.Component<InjectedFormProps<AuthorType, Props> & Props>
     if (author) {
       this.props.setAuthor(author);
       history.push("/articles"); // Navigate after submit
-      console.log("Set the author");
-      console.log(author);
       return author;
     } else {
       const { payload } = this.props.createAuthor(values, (author) => {
@@ -37,7 +35,6 @@ class Home extends React.Component<InjectedFormProps<AuthorType, Props> & Props>
         history.push("/articles"); // Navigate after submit
         return author;
       });
-      console.log("I'm the author");
       return payload;
     }
   };
@@ -50,7 +47,7 @@ class Home extends React.Component<InjectedFormProps<AuthorType, Props> & Props>
             <h1>
               Discover <strong>{"Mateo's"} </strong>blog for <strong>Elinoï !</strong>
             </h1>
-            <p>Get some really intersting content :)</p>
+            <p>Get some really interesting content :)</p>
           </div>
         </div>
 
@@ -98,7 +95,7 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ fetchAuthors, setAuthor, createAuthor }, dispatch);
+  return bindActionCreators({ requestAuthors, setAuthor, createAuthor }, dispatch);
 }
 
 export default reduxForm<AuthorType, Props>({ form: "homeForm" })(connect(mapStateToProps, mapDispatchToProps)(Home));

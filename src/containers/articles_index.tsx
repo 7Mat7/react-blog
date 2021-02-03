@@ -3,20 +3,19 @@ import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { AnyAction, bindActionCreators, Dispatch } from "redux";
 
-import { fetchArticles } from "../actions/index";
+import { requestArticles } from "../actions/index";
 import Article from "../components/article";
 import { ArticleType, AuthorType, State } from "../interface";
 
 interface Props {
   articles: ArticleType[];
-  fetchArticles: () => AnyAction;
+  requestArticles: () => AnyAction;
   author: AuthorType | null;
 }
 
 class ArticlesIndex extends Component<Props> {
   componentDidMount() {
-    console.log("'component did mount'");
-    this.props.fetchArticles();
+    this.props.requestArticles();
   }
 
   renderPosts() {
@@ -26,7 +25,6 @@ class ArticlesIndex extends Component<Props> {
   }
 
   render() {
-    console.log("go render");
     if (this.props.author === null) {
       return <Redirect to="/" />;
     }
@@ -54,7 +52,7 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ fetchArticles }, dispatch);
+  return bindActionCreators({ requestArticles }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticlesIndex);
