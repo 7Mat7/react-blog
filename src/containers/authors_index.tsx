@@ -9,7 +9,7 @@ import { ArticleType, AuthorType, State } from "../interface";
 
 interface Props {
   requestAuthors: () => AnyAction;
-  fetchArticles: () => AnyAction;
+  requestArticles: () => AnyAction;
   articles: ArticleType[];
   authors: AuthorType[];
   author: AuthorType | null;
@@ -18,16 +18,17 @@ interface Props {
 class AuthorsIndex extends React.Component<Props> {
   componentDidMount() {
     this.props.requestAuthors();
-    this.props.fetchArticles();
+    this.props.requestArticles();
   }
 
   handleLoad = (author: any) => {
     const articles = this.props.articles.filter((article) => {
-      return article.author.id === `/api/authors/${author.id}`;
+      return article.author["@id"] === `/api/authors/${author.id}`;
     });
-    return articles.map((article) => {
+    const response = articles.map((article) => {
       return <Article article={article} key={article.id} />;
     });
+    return response;
   };
 
   render() {

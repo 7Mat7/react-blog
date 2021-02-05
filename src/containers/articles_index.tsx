@@ -25,22 +25,25 @@ class ArticlesIndex extends Component<Props> {
   }
 
   render() {
+    console.log(typeof this.props.articles, this.props.articles);
     if (this.props.author === null) {
       return <Redirect to="/" />;
     }
-    return (
-      <div>
-        <div className="first-row">
-          <h3>Blog</h3>
+    if (this.props.articles) {
+      return (
+        <div>
+          <div className="first-row">
+            <h3>Blog</h3>
 
-          <Link className="btn btn-primary btn-cta" to="/articles/new">
-            {"Let's write a post!"}
-          </Link>
+            <Link className="btn btn-primary btn-cta" to="/articles/new">
+              {"Let's write a post!"}
+            </Link>
+          </div>
+          <Link to="/authors">Browse by Author</Link>
+          {this.renderPosts().reverse()}
         </div>
-        <Link to="/authors">Browse by Author</Link>
-        {this.renderPosts().reverse()}
-      </div>
-    );
+      );
+    }
   }
 }
 

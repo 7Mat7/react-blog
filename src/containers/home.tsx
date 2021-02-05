@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field, InjectedFormProps, FormSubmitHandler } from "redux-form";
 import { history } from "../index";
-import { requestAuthors, setAuthor, createAuthor } from "../actions/index";
+import { requestAuthors, setAuthor, authorCreateRequest } from "../actions/index";
 import { AnyAction, bindActionCreators, Dispatch } from "redux";
 import { AuthorType, State } from "../interface";
 
@@ -10,7 +10,7 @@ interface Props {
   requestAuthors: () => AnyAction;
   authors: AuthorType[] | undefined;
   setAuthor: (arg: AuthorType) => AnyAction;
-  createAuthor: typeof createAuthor;
+  authorCreateRequest: typeof authorCreateRequest;
 }
 
 class Home extends React.Component<InjectedFormProps<AuthorType, Props> & Props> {
@@ -30,9 +30,8 @@ class Home extends React.Component<InjectedFormProps<AuthorType, Props> & Props>
       history.push("/articles"); // Navigate after submit
       return author;
     } else {
-      const { payload } = this.props.createAuthor(values, (author) => {
+      const { payload } = this.props.authorCreateRequest(values, (author) => {
         this.props.setAuthor(author);
-        history.push("/articles"); // Navigate after submit
         return author;
       });
       return payload;
@@ -95,7 +94,7 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ requestAuthors, setAuthor, createAuthor }, dispatch);
+  return bindActionCreators({ requestAuthors, setAuthor, authorCreateRequest }, dispatch);
 }
 
 export default reduxForm<AuthorType, Props>({ form: "homeForm" })(connect(mapStateToProps, mapDispatchToProps)(Home));

@@ -4,7 +4,7 @@ import { AnyAction, bindActionCreators, Dispatch } from "redux";
 import { Link, Redirect, match } from "react-router-dom";
 import { history } from "../index";
 
-import { requestArticle, requestArticles, deleteArticle, requestCreateComment } from "../actions/index";
+import { requestArticle, requestArticles, articleDeleteRequest, requestCreateComment } from "../actions/index";
 import CommentsIndex from "./comments_index";
 import CommentsNew from "./comments_new";
 import { ArticleType, AuthorType, State } from "../interface";
@@ -12,7 +12,7 @@ import { ArticleType, AuthorType, State } from "../interface";
 interface Props extends ownProps {
   article: ArticleType | undefined;
   requestArticle: (url: string) => AnyAction;
-  deleteArticle: (article: ArticleType, callback: () => void) => AnyAction;
+  articleDeleteRequest: (article: ArticleType, callback: () => void) => AnyAction;
   author: AuthorType | null;
 }
 
@@ -29,7 +29,7 @@ class ArticlesShow extends React.Component<Props> {
 
   handleClick = () => {
     if (this.props.article) {
-      this.props.deleteArticle(this.props.article, () => {
+      this.props.articleDeleteRequest(this.props.article, () => {
         history.push("/articles");
       });
     }
@@ -100,7 +100,7 @@ function mapStateToProps(state: State, ownProps: ownProps) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ requestArticle, requestArticles, deleteArticle }, dispatch);
+  return bindActionCreators({ requestArticle, requestArticles, articleDeleteRequest }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticlesShow);

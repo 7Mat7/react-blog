@@ -2,15 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import { Link, Redirect } from "react-router-dom";
-import { AnyAction, bindActionCreators, Dispatch } from "redux";
-import { history } from "../index";
+import { bindActionCreators, Dispatch } from "redux";
 
-import { requestArticle } from "../actions/index";
-import { ArticleType, AuthorType, State } from "../interface";
+import { articleCreateRequest, requestArticle } from "../actions/index";
+import { AuthorType, State } from "../interface";
 
 interface Props {
   author: AuthorType | null;
-  createArticle: (body: string, callback: (arg: ArticleType) => void) => AnyAction;
+  articleCreateRequest: typeof articleCreateRequest;
 }
 
 class ArticlesNew extends React.Component<InjectedFormProps<AuthorType, Props> & Props> {
@@ -19,10 +18,7 @@ class ArticlesNew extends React.Component<InjectedFormProps<AuthorType, Props> &
       Object.assign(values, { author: `/api/authors/${this.props.author.id}` });
     }
     console.log(values);
-    this.props.createArticle(values, (article) => {
-      history.push("/articles"); // Navigate after submit
-      return article;
-    });
+    this.props.articleCreateRequest(values);
   };
 
   render() {
@@ -68,7 +64,7 @@ function mapStateToProps(state: State) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ requestArticle }, dispatch);
+  return bindActionCreators({ requestArticle, articleCreateRequest }, dispatch);
 }
 
 export default reduxForm<AuthorType, Props>({ form: "newPostForm" })(

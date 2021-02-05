@@ -60,7 +60,44 @@ export const putArticle = async (action: AnyAction): Promise<any> => {
       headers: { "Content-Type": "application/ld+json" },
       body: JSON.stringify(action.data),
     }).then((response) => response.json());
-    console.log(action);
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const postAuthor = async (action: AnyAction): Promise<any> => {
+  try {
+    const response = await fetch("http://localhost:8000/api/authors", {
+      method: "POST",
+      headers: { "Content-Type": "application/ld+json" },
+      body: JSON.stringify(action.body),
+    }).then((response) => response.json());
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const destroyArticle = async (action: AnyAction): Promise<any> => {
+  try {
+    const response = await fetch(`http://localhost:8000/api/articles/${action.article.id}`, {
+      method: "DELETE",
+    }).then((response) => response.text());
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const postArticle = async (action: AnyAction): Promise<any> => {
+  console.log(action);
+  try {
+    const response = await fetch("http://localhost:8000/api/articles", {
+      method: "POST",
+      headers: { "Content-Type": "application/ld+json" },
+      body: JSON.stringify(action.values),
+    });
     return response;
   } catch (e) {
     console.log(e);
