@@ -18,6 +18,7 @@ class ArticlesNew extends React.Component<InjectedFormProps<AuthorType, Props> &
     if (this.props.author != null) {
       Object.assign(values, { author: `/api/authors/${this.props.author.id}` });
     }
+    console.log(values);
     this.props.createArticle(values, (article) => {
       history.push("/articles"); // Navigate after submit
       return article;

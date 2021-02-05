@@ -8,6 +8,7 @@ export interface State {
 }
 
 export interface AuthorType {
+  "@id": string;
   id: string;
   firstname: string;
   lastname: string;

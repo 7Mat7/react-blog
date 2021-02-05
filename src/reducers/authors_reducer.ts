@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { RECEIVE_AUTHORS } from "../actions";
+import { RECEIVE_AUTHORS } from "../actions/action_types";
 import { AuthorType } from "../interface";
 
 export default function (state: AuthorType[] = [], action: AnyAction): any {

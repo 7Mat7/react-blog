@@ -1,16 +1,22 @@
 import "regenerator-runtime/runtime";
-import { fetchArticle, fetchArticles, fetchAuthors, postNewComment } from "../api/api";
+import { fetchArticle, fetchArticles, fetchAuthors, fetchComments, postNewComment, putArticle } from "../api/api";
 
 import { call, put, all, takeEvery, takeLatest } from "redux-saga/effects";
 import {
-  REQUEST_ARTICLES,
   receiveArticles,
-  REQUEST_AUTHORS,
   receiveAuthors,
+  receiveNewComment,
+  receiveComments,
+  receiveUpdateArticle,
+} from "../actions/index";
+import {
+  REQUEST_ARTICLES,
+  REQUEST_AUTHORS,
   REQUEST_ARTICLE,
   REQUEST_CREATE_COMMENT,
-  receiveNewComment,
-} from "../actions";
+  REQUEST_COMMENTS,
+  REQUEST_ARTICLE_UPDATE,
+} from "../actions/action_types";
 import { AnyAction } from "redux";
 
 function* getArticles() {
@@ -49,11 +55,31 @@ function* newCommentRequest(action: AnyAction) {
   }
 }
 
+function* getComments(action: AnyAction) {
+  try {
+    const data = yield call(fetchComments, action.iri);
+    yield put(receiveComments(data));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* getArticleUpdate(action: AnyAction) {
+  try {
+    const data = yield call(putArticle, action);
+    yield put(receiveUpdateArticle(data));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function* actionWatcher() {
   yield takeLatest(REQUEST_AUTHORS, getAuthors);
   yield takeLatest(REQUEST_ARTICLES, getArticles);
   yield takeEvery(REQUEST_ARTICLE, getArticle);
   yield takeEvery(REQUEST_CREATE_COMMENT, newCommentRequest);
+  yield takeEvery(REQUEST_COMMENTS, getComments);
+  yield takeEvery(REQUEST_ARTICLE_UPDATE, getArticleUpdate);
 }
 
 export default function* rootSaga(): any {

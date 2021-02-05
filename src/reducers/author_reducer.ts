@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { SET_AUTHOR, AUTHOR_CREATED } from "../actions";
+import { SET_AUTHOR, AUTHOR_CREATED } from "../actions/action_types";
 
 export default function (state = [], action: AnyAction): any {
   switch (action.type) {

@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { RECEIVE_ARTICLE, DELETE_ARTICLE, ARTICLE_UPDATED, RECEIVE_ARTICLES } from "../actions";
+import { RECEIVE_ARTICLE, DELETE_ARTICLE, RECEIVE_ARTICLES, RECEIVE_ARTICLE_UPDATE } from "../actions/action_types";
 import { ArticleType } from "../interface";
 
 export default function (state: ArticleType[] = [], action: AnyAction): any {
@@ -10,9 +10,9 @@ export default function (state: ArticleType[] = [], action: AnyAction): any {
     case RECEIVE_ARTICLE:
       console.log(action.data);
       return [action.data];
-    case ARTICLE_UPDATED:
+    case RECEIVE_ARTICLE_UPDATE:
       return state.map((item) => {
-        if (item.id === action.payload.id) return action.payload;
+        if (item.id === action.data.id) return action.data;
         return item;
       });
     case DELETE_ARTICLE:

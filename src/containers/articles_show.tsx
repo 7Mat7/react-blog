@@ -5,7 +5,7 @@ import { Link, Redirect, match } from "react-router-dom";
 import { history } from "../index";
 
 import { requestArticle, requestArticles, deleteArticle, requestCreateComment } from "../actions/index";
-import CommentsIndex from "../components/comments_index";
+import CommentsIndex from "./comments_index";
 import CommentsNew from "./comments_new";
 import { ArticleType, AuthorType, State } from "../interface";
 
@@ -39,7 +39,7 @@ class ArticlesShow extends React.Component<Props> {
     if (
       this.props.article
       && this.props.author
-      && this.props.article.author.id === `/api/authors/${this.props.author.id}`
+      && this.props.article.author["@id"] === `/api/authors/${this.props.author.id}`
     ) {
       return (
         <div>

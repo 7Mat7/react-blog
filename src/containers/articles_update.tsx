@@ -4,15 +4,14 @@ import { AnyAction, bindActionCreators, Dispatch } from "redux";
 
 import { reduxForm, Field, InjectedFormProps } from "redux-form";
 import { Link, match, Redirect } from "react-router-dom";
-import { requestArticle, updateArticle } from "../actions/index";
+import { requestArticle, requestArticleUpdate } from "../actions/index";
 import { ArticleType, AuthorType, State } from "../interface";
-import { history } from "../index";
 
 interface Props extends ownProps {
   article: ArticleType | undefined;
   fetchArticle: (iri: string) => Promise<AnyAction>;
   author: AuthorType | null;
-  updateArticle: (body: ArticleType, id: number, callback: (arg: ArticleType) => void) => AnyAction;
+  requestArticleUpdate: (body: ArticleType, id: number) => AnyAction;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
@@ -31,10 +30,7 @@ class ArticlesUpdate extends PureComponent<InjectedFormProps<ArticleType, Props>
     if (this.props.article && this.props.author != null) {
       const id = this.props.article.id;
       Object.assign(values, { author: `/api/authors/${this.props.author.id}` });
-      this.props.updateArticle(values, id, (article) => {
-        history.push("/articles");
-        return article;
-      });
+      this.props.requestArticleUpdate(values, id);
     }
   };
 
@@ -85,7 +81,7 @@ function mapStateToProps(state: State, ownProps: ownProps) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  return bindActionCreators({ requestArticle, updateArticle }, dispatch);
+  return bindActionCreators({ requestArticle, requestArticleUpdate }, dispatch);
 }
 
 export default reduxForm<ArticleType, Props>({ form: "updatePostForm" })(
